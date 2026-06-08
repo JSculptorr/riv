@@ -1,0 +1,676 @@
+:root {
+  --ink: #151612;
+  --muted: #30342d;
+  --line: rgba(21, 22, 18, 0.16);
+  --panel: rgba(244, 244, 238, 0.68);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout: cubic-bezier(0.76, 0, 0.24, 1);
+  --drag-offset: 0px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+  overflow: hidden;
+  background: #e7e8df;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  color: inherit;
+  font: inherit;
+}
+
+.demo-page {
+  min-height: 100svh;
+}
+
+.car-showcase {
+  width: 100%;
+  height: 100svh;
+  min-height: 720px;
+  display: grid;
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(44, 49, 39, 0.08), transparent 9%, transparent 91%, rgba(44, 49, 39, 0.08)),
+    linear-gradient(180deg, #f8f8f5 0%, #eeeeea 56%, #d7d9d0 100%);
+}
+
+.showcase-shell {
+  width: min(100%, 1720px);
+  height: 100svh;
+  min-height: inherit;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  justify-self: center;
+  margin-inline: auto;
+  padding: clamp(18px, 2.8vw, 48px);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.showcase-shell::before {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 18%;
+  height: 18%;
+  z-index: 0;
+  border-radius: 999px;
+  background: rgba(31, 34, 28, 0.2);
+  filter: blur(34px);
+  transform: scaleX(0.72);
+  pointer-events: none;
+}
+
+.showcase-topline,
+.showcase-stage,
+.showcase-footer {
+  position: relative;
+  z-index: 7;
+}
+
+.showcase-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+  color: rgba(21, 22, 18, 0.82);
+  font-size: 13px;
+  font-weight: 760;
+  letter-spacing: 0.2em;
+}
+
+.brand-diamond {
+  width: 27px;
+  height: 27px;
+  position: relative;
+  border: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.brand-diamond::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 2px solid currentColor;
+}
+
+.showcase-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(21, 22, 18, 0.62);
+  font-size: 13px;
+  font-weight: 720;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.count-line {
+  width: clamp(40px, 7vw, 104px);
+  height: 1px;
+  background: var(--line);
+}
+
+.showcase-stage {
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.showcase-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.model-word {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  z-index: 1;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.9);
+  font-size: clamp(170px, 26vw, 450px);
+  font-weight: 900;
+  line-height: 0.74;
+  letter-spacing: 0;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translate3d(-50%, -50%, 0);
+  transition:
+    opacity 420ms var(--ease-out),
+    transform 760ms var(--ease-out);
+}
+
+.model-word.is-changing {
+  opacity: 0;
+  transform: translate3d(-50%, -50%, 0) scale(0.94);
+}
+
+.slides-track {
+  --drag-offset: 0px;
+  position: absolute;
+  inset: 0 -14% 9%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.car-slide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 80ms linear,
+    transform 80ms linear;
+  will-change: opacity, transform;
+}
+
+.car-media {
+  width: min(110vw, 1600px);
+  max-width: 100%;
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0, 7vh, 0) scale(0.88);
+  transition:
+    transform 80ms linear,
+    filter 80ms linear;
+  will-change: transform;
+}
+
+.car-slide.is-active {
+  z-index: 4;
+  opacity: 1;
+}
+
+.car-slide.is-active .car-media {
+  transform: translate3d(var(--drag-offset), 7vh, 0) scale(1);
+  filter: saturate(1.03) contrast(1.03);
+}
+
+.car-slide.is-prev {
+  z-index: 2;
+  opacity: 0.34;
+  transform: translate3d(-64%, 7%, 0) scale(0.98);
+}
+
+.car-slide.is-next {
+  z-index: 2;
+  opacity: 0.34;
+  transform: translate3d(64%, 7%, 0) scale(0.98);
+}
+
+.car-showcase.is-wheel-driven .car-slide {
+  opacity: var(--slide-opacity, 0);
+  transform:
+    translate3d(var(--slide-x, 0px), calc(var(--slide-depth, 0) * 1.2vh), 0)
+    scale(var(--slide-scale, 0.92));
+}
+
+.car-showcase.is-wheel-driven .car-media {
+  transform: translate3d(var(--drag-offset), 7vh, 0) scale(var(--media-scale, 0.98));
+}
+
+.showcase-stage.is-dragging .car-slide,
+.showcase-stage.is-dragging .car-media {
+  transition: none;
+}
+
+.car-image {
+  width: 100%;
+  max-height: min(70vh, 790px);
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  position: relative;
+  z-index: 3;
+  pointer-events: none;
+  image-rendering: auto;
+  mix-blend-mode: normal;
+  filter:
+    brightness(1.02)
+    contrast(1.08)
+    saturate(1.02)
+    drop-shadow(0 34px 58px rgba(18, 20, 17, 0.24));
+}
+
+.car-media-r1s .car-image,
+.car-media-r1t .car-image {
+  filter:
+    brightness(1.06)
+    contrast(1.14)
+    saturate(1.04)
+    drop-shadow(0 34px 58px rgba(18, 20, 17, 0.24));
+}
+
+.car-media-r1s {
+  width: min(86vw, 1420px);
+}
+
+.car-media-r1t,
+.car-media-van {
+  width: min(96vw, 1600px);
+}
+
+.car-media-van .car-image {
+  mix-blend-mode: normal;
+  filter:
+    brightness(1.04)
+    contrast(1.08)
+    saturate(1)
+    drop-shadow(0 34px 58px rgba(18, 20, 17, 0.24));
+}
+
+.car-reflection {
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  bottom: 4%;
+  height: 14%;
+  z-index: 1;
+  border-radius: 999px;
+  background: rgba(20, 21, 18, 0.18);
+  filter: blur(18px);
+  transform: scaleX(0.82);
+}
+
+.showcase-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 560px) auto;
+  align-items: end;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.slide-copy {
+  min-width: 0;
+  max-width: 560px;
+  position: relative;
+  z-index: 8;
+  padding-bottom: clamp(2px, 1.2vh, 18px);
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: rgba(15, 16, 13, 0.74);
+  font-size: 12px;
+  font-weight: 820;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.slide-copy h1 {
+  margin: 0;
+  color: #161713;
+  font-size: clamp(50px, 7vw, 104px);
+  font-weight: 880;
+  line-height: 0.86;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.slide-copy p:not(.eyebrow) {
+  max-width: 510px;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: clamp(15px, 1.12vw, 18px);
+  font-weight: 560;
+  line-height: 1.55;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8),
+    0 10px 24px rgba(255, 255, 255, 0.72);
+}
+
+.details-button {
+  width: fit-content;
+  min-height: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 26px;
+  padding: 0 21px 0 23px;
+  border: 1px solid rgba(21, 22, 18, 0.26);
+  background: rgba(255, 255, 255, 0.38);
+  color: #151612;
+  font-size: 13px;
+  font-weight: 780;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(18px);
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    transform 220ms ease;
+}
+
+.details-button:hover {
+  border-color: rgba(21, 22, 18, 0.44);
+  background: rgba(255, 255, 255, 0.72);
+  transform: translateY(-2px);
+}
+
+.button-arrow {
+  width: 32px;
+  height: 10px;
+  position: relative;
+  display: inline-block;
+}
+
+.button-arrow::before,
+.button-arrow::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+
+.button-arrow::before {
+  width: 32px;
+  height: 1px;
+  background: currentColor;
+  transform: translateY(-50%);
+}
+
+.button-arrow::after {
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid currentColor;
+  border-right: 1px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.slider-controls {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  min-width: 0;
+}
+
+.slider-controls .nav-button {
+  display: none;
+}
+
+.nav-button {
+  width: 56px;
+  height: 56px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid rgba(21, 22, 18, 0.18);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.42);
+  cursor: pointer;
+  backdrop-filter: blur(18px);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease;
+}
+
+.nav-button:hover {
+  border-color: rgba(21, 22, 18, 0.36);
+  background: rgba(255, 255, 255, 0.72);
+  transform: translateY(-2px);
+}
+
+.nav-button span {
+  width: 18px;
+  height: 18px;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateX(3px) rotate(45deg);
+}
+
+.nav-button-next span {
+  transform: translateX(-3px) rotate(225deg);
+}
+
+.slider-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot-button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dot-button::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(21, 22, 18, 0.28);
+  transition:
+    width 260ms ease,
+    border-radius 260ms ease,
+    background-color 260ms ease;
+}
+
+.dot-button.is-active::before {
+  width: 30px;
+  border-radius: 999px;
+  background: #151612;
+}
+
+@media (max-width: 1024px) {
+  .car-showcase {
+    min-height: 760px;
+  }
+
+  .showcase-shell {
+    padding: 24px;
+  }
+
+  .model-word {
+    top: 34%;
+    font-size: clamp(130px, 29vw, 300px);
+  }
+
+  .car-media {
+    width: min(116vw, 1120px);
+  }
+
+  .car-media-r1s {
+    width: min(94vw, 980px);
+  }
+
+  .car-media-r1t,
+  .car-media-van {
+    width: min(106vw, 1080px);
+  }
+
+  .showcase-footer {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .slider-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 700px) {
+  .car-showcase {
+    height: 100svh;
+    min-height: 100svh;
+  }
+
+  .showcase-shell {
+    min-height: 100svh;
+    padding: 18px 16px 22px;
+  }
+
+  .brand-mark {
+    gap: 9px;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+  }
+
+  .brand-diamond {
+    width: 22px;
+    height: 22px;
+  }
+
+  .showcase-count {
+    gap: 9px;
+    font-size: 12px;
+  }
+
+  .count-line {
+    width: 34px;
+  }
+
+  .model-word {
+    top: 31%;
+    font-size: clamp(82px, 34vw, 148px);
+  }
+
+  .slides-track {
+    inset: 3% -8% 20%;
+  }
+
+  .car-media {
+    width: min(132vw, 680px);
+    transform: translate3d(0, 0, 0) scale(0.9);
+  }
+
+  .car-media-r1s {
+    width: min(102vw, 580px);
+  }
+
+  .car-media-r1t,
+  .car-media-van {
+    width: min(112vw, 620px);
+  }
+
+  .car-image {
+    max-height: 44vh;
+  }
+
+  .car-slide.is-active .car-media {
+    transform: translate3d(var(--drag-offset), 5vh, 0) scale(1);
+  }
+
+  .car-slide.is-prev {
+    transform: translate3d(-68%, 1vh, 0) scale(0.88);
+  }
+
+  .car-slide.is-next {
+    transform: translate3d(68%, 1vh, 0) scale(0.88);
+  }
+
+  .showcase-footer {
+    gap: 22px;
+  }
+
+  .slide-copy h1 {
+    font-size: clamp(46px, 17vw, 72px);
+  }
+
+  .slide-copy p:not(.eyebrow) {
+    margin-top: 14px;
+    font-size: 15px;
+  }
+
+  .details-button {
+    min-height: 46px;
+    margin-top: 20px;
+    padding-inline: 18px;
+  }
+
+  .nav-button {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 430px) {
+  .showcase-shell {
+    padding-inline: 14px;
+  }
+
+  .model-word {
+    top: 31%;
+    font-size: clamp(70px, 34vw, 124px);
+  }
+
+  .car-media {
+    width: min(140vw, 560px);
+  }
+
+  .car-media-r1s {
+    width: min(104vw, 500px);
+  }
+
+  .car-media-r1t,
+  .car-media-van {
+    width: min(116vw, 540px);
+  }
+
+  .slides-track {
+    inset-inline: -4%;
+  }
+
+  .car-showcase.is-wheel-driven .car-media {
+    transform: translate3d(var(--drag-offset), 6vh, 0) scale(var(--media-scale, 0.98));
+  }
+
+  .slider-dots {
+    gap: 6px;
+  }
+
+  .dot-button {
+    width: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+  }
+}
