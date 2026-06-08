@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rivian Showcase Demo</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="demo-page">
+      <section class="car-showcase" aria-label="Premium vehicle showcase">
+        <div class="showcase-shell">
+          <div class="showcase-topline">
+            <a class="brand-mark" href="https://rivian.com" aria-label="Rivian">
+              <span class="brand-diamond"></span>
+              <span>RIVIAN</span>
+            </a>
+
+            <div class="showcase-count" aria-live="polite">
+              <span data-current>01</span>
+              <span class="count-line"></span>
+              <span data-total>03</span>
+            </div>
+          </div>
+
+          <div class="showcase-stage" data-slider>
+            <div class="model-word" data-model-word>R1S</div>
+            <div class="slides-track" data-track></div>
+          </div>
+
+          <div class="showcase-footer">
+            <div class="slide-copy">
+              <p class="eyebrow" data-eyebrow>Adventure SUV</p>
+              <h1 data-title>R1S</h1>
+              <p data-description>
+                Three-row electric SUV with clean proportions, quiet power and long-route confidence.
+              </p>
+              <a class="details-button" href="https://rivian.com/r1s" data-button>
+                <span>Подробнее</span>
+                <span class="button-arrow" aria-hidden="true"></span>
+              </a>
+            </div>
+
+            <div class="slider-controls" aria-label="Slider controls">
+              <button class="nav-button" type="button" data-prev aria-label="Previous vehicle">
+                <span aria-hidden="true"></span>
+              </button>
+              <div class="slider-dots" data-dots></div>
+              <button class="nav-button nav-button-next" type="button" data-next aria-label="Next vehicle">
+                <span aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
